@@ -1,0 +1,187 @@
+<!-- <button routerLink="/backoffice/checking">CHECKING</button> -->
+<!-- <form (ngSubmit)="submit()" [formGroup]="f">
+
+    <input type="text" placeholder="Nome" formControlName="name"> 
+    <input type="text" placeholder="Cognome" formControlName="last_name"> 
+    <input type="email" placeholder="Email" formControlName="email"> 
+    <input type="tel" placeholder="Telefono" formControlName="tel"> 
+
+    <div formGroupName="fulldate">
+        <input type="number" formControlName="day">
+        <input type="number" formControlName="month">
+        <select formControlName="time">
+            <option *ngFor="let t of times" [value]="t">{{t}}</option>
+        </select>
+    </div>
+
+    <button type="button" (click)="addExtra()">Aggiungi passeggero</button>
+    <div *ngFor="let e of extras.controls; let i = index" formArrayName="extras">
+        <ng-container [formGroupName]="i">
+            <label for="extra-name-{{i}}">
+                Nome
+            </label>
+            <input type="text" id="extra-name-{{i}}" formControlName="eName">
+            <label for="extra-email-{{i}}">
+                Email
+            </label>
+            <input type="text" id="extra-email-{{i}}" formControlName="eEmail">
+            <input type="text" id="extra-tel-{{i}}" formControlName="eName">
+            <label for="extra-tel-{{i}}">
+                Email
+            </label>
+            <input type="text" id="extra-tel-{{i}}" formControlName="eTel">
+        </ng-container>
+    </div>
+
+    <button type="submit">Prenota</button>
+</form> -->
+
+<!-- NEW UI -->
+<div id="container">
+    <header>
+        <h1>Book you tour now</h1>
+        <div class="step" [ngClass]="{'active': step == 1, 'picked': !!currentFulldate.day}">
+            <i class="bi bi-calendar-event" *ngIf="!currentFulldate.day"></i>
+            <i class="bi bi-calendar-event" *ngIf="!!currentFulldate.day"></i>
+            {{ !!day ? (currentDate | date: 'd MMMM YYYY') : 'Pick a date'}}
+        </div>
+        <div class="step" [ngClass]="{'active': step == 2, 'picked': !!currentFulldate.month}">
+            <i class="bi bi-clock" *ngIf="!currentFulldate.month"></i>
+            <i class="bi bi-clock-fill" *ngIf="!!currentFulldate.month"></i>
+            {{ !!day ? time : 'Choose the time'}}
+        </div>
+        <div class="step" [ngClass]="{'active': step == 3, 'picked': f.valid}">
+            <i class="bi bi-people" *ngIf="!f.valid"></i>
+            <i class="bi bi-people-fill" *ngIf="f.valid"></i>
+            {{f.valid ? 1 + f.value.extras!.length : 'Enroll the crew'}}
+        </div>
+    </header>
+    <form (ngSubmit)="submit()" [formGroup]="f">
+
+        <section id="dateTimeSection" [ngClass]="{'active': step == 1}">
+            <div formGroupName="fulldate" >
+                <input type="number" style="display: none;" step="1" formControlName="year">
+                <input type="number" style="display: none;" step="1" min="0" max="12" formControlName="month">
+                <input type="number" style="display: none;" step="1" min="0" max="31" formControlName="day">
+                <input type="text" style="display: none;" formControlName="time">
+
+
+                <app-datetime-picker 
+                    (yearChanged)="year = $event"
+                    (dayPicked)="day = $event"
+                    (monthPicked)="month = $event"
+                    (timePicked)="time = $event"
+                    [fulldate]="currentFulldate"
+                    [times]="times"
+                ></app-datetime-picker>
+            </div>
+        </section>
+
+        <section id="infoSection" [ngClass]="{'active': step == 2}">
+            <h1>Your informations</h1>
+            <app-input
+            type="string"
+            name="name"
+            label="Nome completo"
+            [fc]="getFormControl('name')"
+            [required]="true"
+            />
+            <div class="row">
+                <app-input
+                type="email"
+                name="email"
+                label="Email"
+                [fc]="getFormControl('email')"
+                [required]="true"
+                />
+                <app-input
+                type="tel"
+                name="tel"
+                label="Phone"
+                [fc]="getFormControl('tel')"
+                [required]="true"
+                />
+
+            </div>
+
+            <div class="row counter">
+                <h3>How many people</h3>
+                <i class="bi bi-dash-circle-fill" (click)="removeExtra()" [ngClass]="{'disabled': extras.length < 1}"></i>
+                <p>
+                    {{extras.length + 1}}
+                    <br>
+                    <small>{{extras.length == 0 ? 'Person' : 'People'}}</small>
+                </p>
+                <i class="bi bi-plus-circle-fill" (click)="addExtra()" [ngClass]="{'disabled': extras.length >= maxExtras-1}"></i>
+            </div>
+
+            
+
+        </section>
+
+        <section id="crewSection" [ngClass]="{'active': step == 3}">
+            <h1>Enroll your crew</h1>
+            <div *ngFor="let e of extras.controls; let i = index" formArrayName="extras" class="extraPage"
+            [ngClass]="[currentExtra == i ? 'visibile' : currentExtra < i ? 'after' : 'before']">
+                <ng-container [formGroupName]="i">
+                    <app-input
+                    type="string"
+                    name="name"
+                    label="Nome completo"
+                    [fc]="getExtrasFC('eName', i)"
+                    [required]="true"
+                    />
+
+                        <app-input
+                        type="email"
+                        name="email"
+                        label="Email"
+                        [fc]="getExtrasFC('eEmail', i)"
+                        [required]="true"
+                        />
+                        <app-input
+                        type="tel"
+                        name="tel"
+                        label="Phone"
+                        [fc]="getExtrasFC('eTel', i)"
+                        />
+        
+
+                </ng-container>
+            </div>
+
+            <div class="row pagination">
+                <i class="bi arrow bi-arrow-left-circle-fill" (click)="prevExtra()" [ngClass]="{'disabled': currentExtra == 0}"></i>
+                <i class="bi page" *ngFor="let e of extras.controls; let i = index"
+                [ngClass]="[e.valid ? 'bi-person-fill' : 'bi-person', currentExtra == i ? 'current' : '']"
+                ></i>
+                <i class="bi arrow bi-arrow-right-circle-fill" (click)="nextExtra()" [ngClass]="{'disabled': currentExtra >= extras.length-1}"></i>
+            </div>
+
+            <!-- <button (click)="addExtra()">ADD {{currentExtra}} {{extras.length}}</button> -->
+        </section>
+
+        <section id="resocontoSection" [ngClass]="{'active': step == 4}">resoconto</section>
+
+    </form>
+    <footer [ngClass]="{'active': step == 4}">
+        <span>
+            Totale
+            <br>
+            <b>{{totalPrice | currency:'EUR'}}</b>
+        </span>
+
+        <button (click)="next()">
+            <i class="bi bi-ticket-perforated-fill" *ngIf="step == 4"></i>
+            {{
+                step == 1 ? 'Insert your info' :
+                step == 2 ? (this.extras.length != 0 ? 'Enroll the crew' : 'Confirm booking') :
+                step == 3 ? 'Confirm booking' :
+                step == 4 ? 'Pay now' :
+                'Next'
+            }}
+
+            <!-- sudo ng s -o --host 192.168.1.87 --ssl true -->
+        </button>
+    </footer>
+</div>

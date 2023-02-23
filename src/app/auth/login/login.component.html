@@ -1,0 +1,8 @@
+<form #f="ngForm" (ngSubmit)="submit(f)" >
+
+    <input type="text" name="username" ngModel required>
+    <input type="password" name="pasword" ngModel required>
+
+    <button type="submit" [disabled]="loading">Accedi</button>
+
+</form>

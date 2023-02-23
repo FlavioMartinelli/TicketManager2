@@ -1,0 +1,32 @@
+<nav>
+    <button routerLink="/backoffice">INDIETRO</button>
+</nav>
+<div class="scanner-container">
+
+    <app-scan [loading]="checking" color="#f00"></app-scan>
+
+    <zxing-scanner
+    [formats]="allowedFormats"
+    previewFitMode="cover"
+
+    (camerasNotFound)="handleCamerasNotFound($event)"
+
+
+    (scanSuccess)="handleScanSuccess($event)"
+    ></zxing-scanner>
+</div>
+
+<app-ticket-info
+    [ticket]="ticketInfo"
+    (closeEvent)="detachTicket()"
+    (validateEvent)="validate($event)"
+></app-ticket-info>
+
+<!-- [formats]="['QR-CODE']"
+(scanSuccess)="handleScanSuccess($e)"
+[scannerEnabled]="true"
+[torch]="torch"
+[previewFitMode]="cover"
+[previewScaleMode]="fill"
+[enableCameraSwitcher]="false"
+[enableTorcheToggle]="true" -->

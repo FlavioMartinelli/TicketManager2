@@ -1,0 +1,31 @@
+<div class="dateTimePicker">
+    <div class="picker" id="datePicker">
+        <header>
+            <i class="bi bi-caret-left" (click)="prevMonth()"></i>
+            <b>
+                {{currentDate | date:'MMMM'}}
+            </b>
+            <i class="bi bi-caret-right" (click)="nextMonth()"></i>
+        </header>
+        <small>
+            <span>M</span>
+            <span>T</span>
+            <span>W</span>
+            <span>T</span>
+            <span>F</span>
+            <span>S</span>
+            <span>S</span>
+        </small>
+        <div class="container">
+            <span *ngFor="let d of daysOfMonth; let i = index" [ngClass]="{'active': d == fulldate.day, 'disabled': !d}" (click)="day = d">
+                {{d ? d : '•'}}
+            </span>
+        </div>
+    </div>
+    
+    <div class="picker" id="timePicker">
+        <span *ngFor="let t of times" [ngClass]="{'active': t.time == fulldate.time, 'disabled': !t.available}" (click)="time = t.time">
+            {{t.time}}
+        </span>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+::ng-deep {
+
+    zxing-scanner {
+        height: 100%;
+        position: relative;
+    }
+
+    video {
+        height: 100%!important;
+    }
+
+    * {
+        overflow: hidden;
+    }
+}
+
+.scanner-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+}
+
+//nav
+
+nav {
+    position: absolute;
+    z-index: 999999;
+}

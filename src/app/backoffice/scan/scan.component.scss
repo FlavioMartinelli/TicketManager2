@@ -1,0 +1,51 @@
+$barColor: white;
+
+
+/*SCANNER*/
+.box {
+    z-index: 99;
+    width:25vh;
+    height:25vh;
+    outline:2px solid white;
+    outline-offset:20px;
+    position:relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    // transform: translate(-50%, -50%) rotate(90deg);
+    transform: translate(-50%, -50%);
+  }
+  .box::before {
+    content:"";
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    width:5px;
+    height: 100%;
+    background:$barColor;
+    box-shadow:0 0 70px 20px $barColor;
+    clip-path:inset(0);
+    animation:
+      x 1s ease-in-out infinite alternate,
+      y 2s   ease-in-out infinite;
+  }
+  
+  @keyframes x {
+    to {
+      transform:translateX(-100%);
+      left:100%;
+    }
+  }
+  
+  @keyframes y {
+     33% {
+       clip-path:inset(0 0 0 -100px);    
+     }
+     50% {
+       clip-path:inset(0 0 0 0);    
+     }
+     83%{
+       clip-path:inset(0 -100px 0 0); 
+     }
+  }

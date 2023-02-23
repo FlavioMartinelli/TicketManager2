@@ -1,0 +1,77 @@
+$primary: #61aff8;
+$secondary: #eb7b4c;
+$white: #fff;
+$black: #12275c;
+
+.input{
+    position: relative;
+    padding-top: 1em;
+    margin-bottom: 1em;
+    label {
+        transition: all .3s ease;
+        position: absolute;
+        bottom: 1em;
+        left: 0;
+    }
+
+    .border {
+        position: absolute;
+        height: 1px;
+        bottom: 2px;
+        width: 0;
+        transition: all .3s ease;
+        background-color: $black;
+    }
+
+    input {
+        padding: 5px;
+        box-sizing: border-box;
+        width: 100%;
+        border: none;
+        border-bottom: solid 1px $black;
+        background-color: transparent;
+
+        &:focus {
+            outline: none;
+
+            & ~ .border {
+                width: 100%;
+            }
+
+            & ~ label {
+                transform: translateY(-100%);
+            }
+        }
+
+        &.valid {
+            & ~ .border {
+                width: 100%;
+                background-color: $primary;
+                
+            }
+
+            & ~ label {
+                transform: translateY(-100%);
+                color: $primary;
+            }
+        }
+        &.invalid {
+            & ~ .border {
+                width: 100%;
+                background-color: $secondary;
+                
+            }
+
+            & ~ label {
+                transform: translateY(0%);
+                color: $secondary;
+            }
+        }
+
+        &.required ~ label {
+            &::after {
+                content: ' *';
+            }
+        }
+    }
+}

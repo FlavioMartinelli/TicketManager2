@@ -1,0 +1,36 @@
+<div class="ticket-info" [ngClass]="{'active': !!ticket}">
+    <header>
+        <button (click)="close()">X</button>
+        <div>
+            <h1>INFO TICKET</h1>
+            <h4>DAY: {{currentDate | date: 'd MMMM YYY'}}</h4>
+        </div>
+    </header>
+    <main>
+        <div class="scrollable">
+            <h1>Info passenger</h1>
+            <h2>Prenotato da</h2>
+            <ul>
+                <li>Name: {{ticket!.passenger.name}}</li>
+                <li>Last name: {{ticket!.passenger.last_name}}</li>
+                <li>Email: {{ticket!.passenger.email}}</li>
+                <li>Phone: {{ticket!.passenger.tel}}</li>
+            </ul>
+            <hr>
+            <h3>Other passengers {{ticket!.extras.length}}</h3>
+
+                <ul *ngFor="let p of ticket!.extras">
+                    <li>Name: {{p.name}}</li>
+                    <li>Last name: {{p.last_name}}</li>
+                    <li>Email: {{p.email}}</li>
+                    <li>Phone: {{p.tel}}</li>
+                </ul>
+
+
+        </div>  
+        <footer>
+            <button (click)="validate(false)">RIFIUTA</button>
+            <button (click)="validate(true)">CONVALIDA</button>
+        </footer>
+    </main>
+</div>

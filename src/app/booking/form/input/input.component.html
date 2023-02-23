@@ -1,0 +1,6 @@
+<div class="input">
+    <!-- <input type="{{type}}" id="input-{{name}}" [formControl]="fc" [ngClass]="{'valid': fc.valid}"> -->
+    <input type="{{type}}" id="input-{{name}}" [formControl]="fc" [ngClass]="[fc.valid ? 'valid' : 'invalid', required ? 'required': '']" autofocus="false">
+    <div class="border"></div>
+    <label for="input-{{name}}">{{label}}</label>
+</div>
